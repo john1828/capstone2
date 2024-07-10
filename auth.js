@@ -20,7 +20,7 @@ module.exports.verify = (req, res, next) => {
     return res.status(403).send({ auth: "Failed. No Token" });
   } else {
     token = token.replace("Bearer ", ""); // Strip 'Bearer ' from the token
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
+    jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decodedToken) => {
       if (err) {
         return res.status(403).send({
           auth: "Failed",
