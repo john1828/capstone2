@@ -1,63 +1,60 @@
-<<<<<<< HEAD
 const Product = require("../models/Product.js");
-const bcrypt = require("bcrypt");
-const auth = require("../auth.js");
-const { errorHandler } = auth;
+const { errorHandler } = require("../auth");
 
 //[SECTION] Create a product
 module.exports.addProduct = (req, res) => {
-    let newProduct = new Product({
-        name : req.body.name,
-        description : req.body.description,
-        price : req.body.price
-    });
-    Product.findOne({ name:req.body.name })
-    .then(existingProduct => {
-        if(existingProduct){
-            return res.status(409).send({message: "Product is already exist"})
-        } else {
-            return newProduct.save()
-            .then(savedProduct => res.send({
-                product: newProduct
-            }))
-            .catch(err => errorHandler(err, req, res));
-        }
-    }).catch(err => errorHandler(err, req, res));
-}; 
+  let newProduct = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+  });
+  Product.findOne({ name: req.body.name })
+    .then((existingProduct) => {
+      if (existingProduct) {
+        return res.status(409).send({ message: "Product is already exist" });
+      } else {
+        return newProduct
+          .save()
+          .then((savedProduct) =>
+            res.send({
+              product: newProduct,
+            })
+          )
+          .catch((err) => errorHandler(err, req, res));
+      }
+    })
+    .catch((err) => errorHandler(err, req, res));
+};
 
 //[SECTION] Retrieve all products
 module.exports.getAllProduct = (req, res) => {
-    return Product.find({})
-    .then(result => {
-        if(result.length > 0){
-            return res.status(200).send({ products: result });
-        }
-        else{
-            return res.status(404).send({message: 'No product found'});
-        }
+  return Product.find({})
+    .then((result) => {
+      if (result.length > 0) {
+        return res.status(200).send({ products: result });
+      } else {
+        return res.status(404).send({ message: "No product found" });
+      }
     })
-    .catch(error => errorHandler(error, req, res));
+    .catch((error) => errorHandler(error, req, res));
 };
 
 //[SECTION] Retrieve all active products
 module.exports.getActiveProduct = (req, res) => {
-    Product.find({ isActive: true })
-    .then(result => {
-        if(result.length > 0){
-            return res.status(200).send({ products: result });
-        } else {
-            return res.status(404).send({message: 'No active product found'});
-        }
+  Product.find({ isActive: true })
+    .then((result) => {
+      if (result.length > 0) {
+        return res.status(200).send({ products: result });
+      } else {
+        return res.status(404).send({ message: "No active product found" });
+      }
     })
-    .catch(error => errorHandler(error, req, res));
+    .catch((error) => errorHandler(error, req, res));
 };
-=======
-const Product = require("../models/Product");
-const { errorHandler } = require("../auth");
 
 // Controller function for retrieving a single product
 module.exports.retrieveSingleProduct = (req, res) => {
-  Product.findById(req.params.id)
+  Product.findById(req.params.productId)
     .then((retrievedProduct) => {
       if (retrievedProduct) {
         return res.status(200).send({
@@ -145,4 +142,3 @@ module.exports.activateProduct = (req, res) => {
     })
     .catch((error) => errorHandler(error, req, res));
 };
->>>>>>> a1d37c290bbe357654afb9ff6a3bcdfb967236e5
