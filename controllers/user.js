@@ -21,13 +21,9 @@ module.exports.getProfile = (req, res) => {
 //[SECTION] Controller function to update another user as an admin
 module.exports.updateAsAdmin = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params.id;
         if (!id) {
             return res.status(400).json({ message: 'User ID is required' });
-        }
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
         }
         user.isAdmin = true;
         await user.save();
@@ -35,7 +31,7 @@ module.exports.updateAsAdmin = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Failed in Find', details: error.message });
     }
-}; 
+};  
 
 //[SECTION] Function to update password
 module.exports.updatePassword = async (req, res) => {
