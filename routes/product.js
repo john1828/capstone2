@@ -1,6 +1,5 @@
 const express = require("express");
 const productController = require("../controllers/product.js");
-<<<<<<< HEAD
 const { verify, verifyAdmin } = require("../auth.js");
 
 const router = express.Router(); 
@@ -13,13 +12,6 @@ router.get("/all", verify, verifyAdmin, productController.getAllProduct);
 
 // [SECTION] Route for retrieving all active products
 router.get("/active", productController.getActiveProduct);
-
-
-module.exports = router; 
-=======
-const { verifyAdmin } = require("../auth.js");
-
-const router = express.Router();
 
 // Route for Retrieving single product
 router.get("/:productId", productController.retrieveSingleProduct);
@@ -46,4 +38,3 @@ router.patch(
 );
 
 module.exports = router;
->>>>>>> a1d37c290bbe357654afb9ff6a3bcdfb967236e5
