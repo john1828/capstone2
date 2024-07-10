@@ -78,8 +78,8 @@ module.exports.getProfile = (req, res) => {
 //Controller function to update another user as an admin
 module.exports.updateAsAdmin = async (req, res) => {
   try {
-    const { id } = req.params.id;
-    if (!id) {
+    const { userId } = req.params;
+    if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
     const user = await User.findById(userId);
