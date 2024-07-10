@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const Product = require("../models/Product.js");
 const bcrypt = require("bcrypt");
 const auth = require("../auth.js");
@@ -51,9 +50,6 @@ module.exports.getActiveProduct = (req, res) => {
     })
     .catch(error => errorHandler(error, req, res));
 };
-=======
-const Product = require("../models/Product");
-const { errorHandler } = require("../auth");
 
 // Controller function for retrieving a single product
 module.exports.retrieveSingleProduct = (req, res) => {
@@ -145,4 +141,3 @@ module.exports.activateProduct = (req, res) => {
     })
     .catch((error) => errorHandler(error, req, res));
 };
->>>>>>> a1d37c290bbe357654afb9ff6a3bcdfb967236e5
