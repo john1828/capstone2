@@ -2,7 +2,7 @@ const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const auth = require("../auth.js");
 const { errorHandler } = auth;
-
+ 
 // Controller function for registering a user
 module.exports.registerUser = (req, res) => {
   if (!req.body.email.includes("@")) {
