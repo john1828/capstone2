@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/user.js");
 const productRoutes = require("./routes/product.js");
+const cartRoutes = require("./routes/cart.js");
 require("dotenv").config();
 
 const app = express();
@@ -30,6 +31,8 @@ mongoose.connection.once("open", () =>
 app.use("/users", userRoutes);
 // User routes
 app.use("/products", productRoutes);
+// Cart routes
+app.use("/cart", cartRoutes);
 
 // Start the server
 if (require.main === module) {
