@@ -118,14 +118,16 @@ module.exports.activateProduct = (req, res) => {
     req.params.productId,
     { isActive: true },
     { new: true }
-  ).then((product) => {
-    if (product) {
-      return res.status(200).send({
-        message: "Product activated successfully",
-        activateProduct: product,
-      });
-    } else {
-      return res.status(404).send({ error: "Product not found" });
-    }
-  });
+  )
+    .then((product) => {
+      if (product) {
+        return res.status(200).send({
+          message: "Product activated successfully",
+          activateProduct: product,
+        });
+      } else {
+        return res.status(404).send({ error: "Product not found" });
+      }
+    })
+    .catch((error) => errorHandler(error, req, res));
 };

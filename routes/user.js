@@ -2,7 +2,7 @@ const express = require("express");
 const userController = require("../controllers/user.js");
 const { verify, verifyAdmin } = require("../auth.js");
 
-const router = express.Router(); 
+const router = express.Router();
 
 router.post("/register", userController.registerUser);
 router.post("/login", userController.loginUser);
@@ -22,9 +22,15 @@ router.patch(
 //Route for updating password
 router.patch("/update-password", verify, userController.updatePassword);
 
-//Route in adding to cart
+//Route in adding product to cart
 router.post("/add-to-cart", verify, userController.addCart);
+
+// Route for updating a product quantities in Cart
+router.patch(
+  "/update-cart-quantity",
+  verify,
+  userController.updateCartQuantity
+);
 
 //Export Route System
 module.exports = router;
- 
