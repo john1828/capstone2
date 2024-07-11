@@ -7,7 +7,7 @@ const cartController = require("../controllers/cart.js");
 router.get("/get-cart", verify, cartController.getUserCart);
 
 //Route in adding product to cart
-router.post("/add-to-cart", verify, cartController.addCart);
+router.post("/add-to-cart", verify, cartController.addToCart);
 
 // Route for updating a product quantities in Cart
 router.patch(
