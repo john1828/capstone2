@@ -40,4 +40,8 @@ router.patch(
   productController.activateProduct
 );
 
+// Route for getting user's cart
+// router.get("/get-cart", verify, productController.getUserCart);
+
+
 module.exports = router;
