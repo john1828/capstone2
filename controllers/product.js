@@ -132,3 +132,41 @@ module.exports.activateProduct = (req, res) => {
     .catch((error) => errorHandler(error, req, res));
 };
 
+// Search product by name
+module.exports.searchByName = async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ error: 'Product name is required' });
+        }
+
+        const products = await Product.find({ name });
+        
+        if (products.length === 0) {
+            return res.status(404).json({ error: 'No product found' });
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while searching for products' });
+    }
+};
+
+// Search product by price range
+module.exports.searchByPrice = async (req, res) => {
+  const { minPrice, maxPrice } = req.body;
+
+  if (minPrice === undefined || maxPrice === undefined) {
+    return res.status(400).json({ error: 'Minimum Price and Max Price are required' });
+  }
+
+  try {
+    const products = await Product.find({
+      price: { $gte: minPrice, $lte: maxPrice }
+    });
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while searching for products' });
+  }
+};
