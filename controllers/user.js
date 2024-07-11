@@ -113,6 +113,14 @@ module.exports.updatePassword = async (req, res) => {
 
 
 module.exports.addCart = async (req, res) => {
+
+   if(req.user.isAdmin){
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden",
+    });
+  }
+  
   const { productId, quantity } = req.body;
   const { userId } = req.user;
 
@@ -135,3 +143,27 @@ module.exports.addCart = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
+
+module.exports.getUserCart = async (req, res) => {
+
+  if(req.user.isAdmin){
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden",
+    });
+  }
+
+  const { userId } = req.body;
+  try {
+    const cart = await Cart.findOne({userId});
+    if (!cart) {
+      return res.status(404).send({ error: "Cart not found"});
+    }
+    res.status(200).send({cart: cart});
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+
+
+

@@ -25,6 +25,9 @@ router.patch("/update-password", verify, userController.updatePassword);
 //Route in adding to cart
 router.post("/add-to-cart", verify, userController.addCart);
 
+// Route for getting user's cart
+router.get("/get-cart", verify, userController.getUserCart);
+
 //Export Route System
 module.exports = router;
  
