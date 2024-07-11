@@ -1,4 +1,5 @@
 const Product = require("../models/Product.js");
+const Cart = require("../models/Cart.js");
 const { errorHandler } = require("../auth");
 
 //[SECTION] Create a product
