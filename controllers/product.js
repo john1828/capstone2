@@ -131,3 +131,4 @@ module.exports.activateProduct = (req, res) => {
     })
     .catch((error) => errorHandler(error, req, res));
 };
+

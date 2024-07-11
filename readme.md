@@ -47,3 +47,13 @@ password: jt12345678
 - Create Product
 - Retrieve all Product
 - Retrieve all Active Product
+
+**s53**
+**by Arnel Sinadhan**
+
+- Change product quantities
+
+**by John Emerson Leyson**
+
+- Retrieve user's cart
+- Add to Cart

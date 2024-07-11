@@ -4,8 +4,6 @@ const Product = require("../models/Product.js");
 const bcrypt = require("bcrypt");
 const auth = require("../auth.js");
 const { errorHandler } = auth;
-const Cart = require("../models/Cart.js");
-const Product = require("../models/Product.js");
 
 // Controller function for registering a user
 module.exports.registerUser = (req, res) => {
@@ -113,20 +111,48 @@ module.exports.updatePassword = async (req, res) => {
   }
 };
 
+// Controller function to get users Cart
+module.exports.getUserCart = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden",
+    });
+  }
+
+  const { userId } = req.body;
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).send({ error: "Cart not found" });
+    }
+    res.status(200).send({ cart: cart });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+
 // Controller function for adding products to cart
 module.exports.addCart = async (req, res) => {
+  if (req.user.isAdmin) {
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden",
+    });
+  }
+
   const { productId, quantity } = req.body;
   const { userId } = req.user;
 
   try {
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(404).send("Product not found");
+      return res.status(404).send({ error: "Product not found" });
     }
 
     const subtotal = product.price * quantity;
     const cart = new Cart({
-      userId: userId,
+      userId: req.user.id,
       cartItems: [
         {
           productId: req.body.productId,
