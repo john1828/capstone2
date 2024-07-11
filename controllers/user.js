@@ -1,4 +1,6 @@
 const User = require("../models/User.js");
+const Cart = require("../models/Cart.js");
+const Product = require("../models/Product.js");
 const bcrypt = require("bcrypt");
 const auth = require("../auth.js");
 const { errorHandler } = auth;
@@ -108,6 +110,37 @@ module.exports.updatePassword = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Controller function for adding products to cart
+module.exports.addCart = async (req, res) => {
+  const { productId, quantity } = req.body;
+  const { userId } = req.user;
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
+    const subtotal = product.price * quantity;
+    const cart = new Cart({
+      userId: userId,
+      cartItems: [
+        {
+          productId: req.body.productId,
+          quantity: req.body.quantity,
+          subtotal: subtotal,
+        },
+      ],
+      totalPrice: subtotal,
+    });
+
+    await cart.save();
+    res.status(201).send({ message: "Items added to cart successfully", cart });
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 

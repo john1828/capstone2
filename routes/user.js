@@ -22,6 +22,9 @@ router.patch(
 //Route for updating password
 router.patch("/update-password", verify, userController.updatePassword);
 
+//Route in adding product to cart
+router.post("/add-to-cart", verify, userController.addCart);
+
 // Route for updating a product quantities in Cart
 router.patch(
   "/update-cart-quantity",
