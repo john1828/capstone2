@@ -189,10 +189,7 @@ module.exports.updateCartQuantity = (req, res) => {
           cartItem.subtotal *= cartItem.quantity;
 
           // Update total price of the cart
-          userCart.totalPrice = userCart.cartItems.reduce(
-            (total, item) => total + item.subtotal,
-            0
-          );
+          userCart.totalPrice = cartItem.subtotal;
 
           // Save the updated cart
           return userCart.save();
