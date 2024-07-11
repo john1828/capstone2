@@ -93,22 +93,16 @@ module.exports.updateProduct = (req, res) => {
 
 // Controller function for archiving a product
 module.exports.archiveProduct = (req, res) => {
-  let updateActiveField = {
-    isActive: false,
-  };
-
-  Product.findByIdAndUpdate(req.params.productId, updateActiveField)
+  Product.findByIdAndUpdate(
+    req.params.productId,
+    { isActive: false },
+    { new: true }
+  )
     .then((product) => {
       if (product) {
-        if (!product.isActive) {
-          return res.status(200).send({
-            message: "Product archive successfully",
-            archiveProduct: product,
-          });
-        }
         return res.status(200).send({
-          success: true,
-          message: "Product archived successfully",
+          message: "Product archive successfully",
+          archiveProduct: product,
         });
       } else {
         return res.status(404).send({ error: "Product not found" });
@@ -119,26 +113,18 @@ module.exports.archiveProduct = (req, res) => {
 
 // Controller function for activating a product
 module.exports.activateProduct = (req, res) => {
-  let updateActiveField = {
-    isActive: true,
-  };
-
-  Product.findByIdAndUpdate(req.params.productId, updateActiveField)
-    .then((product) => {
-      if (product) {
-        if (product.isActive) {
-          return res.status(200).send({
-            message: "Product activated successfully",
-            activateProduct: product,
-          });
-        }
-        return res.status(200).send({
-          success: true,
-          message: "Product activated successfully",
-        });
-      } else {
-        return res.status(404).send({ error: "Product not found" });
-      }
-    })
-    .catch((error) => errorHandler(error, req, res));
+  Product.findByIdAndUpdate(
+    req.params.productId,
+    { isActive: true },
+    { new: true }
+  ).then((product) => {
+    if (product) {
+      return res.status(200).send({
+        message: "Product activated successfully",
+        activateProduct: product,
+      });
+    } else {
+      return res.status(404).send({ error: "Product not found" });
+    }
+  });
 };
