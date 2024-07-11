@@ -86,7 +86,7 @@ module.exports.updateCartQuantity = (req, res) => {
           // Save the updated cart
           return userCart.save();
         } else {
-          return res.status(404).send({ message: "Product not found in cart" });
+          return res.status(404).send({ message: "Item not found in cart" });
         }
       }
     })
@@ -95,6 +95,69 @@ module.exports.updateCartQuantity = (req, res) => {
         message: "Item quantity updated successfully",
         updatedCart: updatedCart,
       });
+    })
+    .catch((error) => errorHandler(error, req, res));
+};
+
+// Controller function for removing item in cart
+module.exports.removeItem = (req, res) => {
+  const productId = req.params.productId; // productId will be in params
+
+  Cart.findOne({ userId: req.user.id })
+    .then((userCart) => {
+      if (!userCart) {
+        return res.status(404).send({
+          message: "Cart not found",
+        });
+      }
+
+      let cartItem = userCart.cartItems.find(
+        (item) => item.productId === productId
+      );
+      if (cartItem) {
+        userCart.cartItems.splice(cartItem, 1);
+        userCart.totalPrice = 0;
+
+        return userCart.save().then((updatedCart) => {
+          res.status(200).send({
+            message: "Item removed from cart successfully",
+            updatedCart: updatedCart,
+          });
+        });
+      } else {
+        res.status(404).send({
+          message: "Item not found in cart",
+        });
+      }
+    })
+    .catch((error) => errorHandler(error, req, res));
+};
+
+// Controller function for clearing a cart
+module.exports.clearCart = (req, res) => {
+  Cart.findOne({ userId: req.user.id })
+    .then((userCart) => {
+      if (!userCart) {
+        return res.status(404).send({
+          message: "Cart not found",
+        });
+      }
+
+      if (userCart.cartItems.length > 0) {
+        userCart.cartItems = [];
+        userCart.totalPrice = 0;
+
+        return userCart.save().then((updatedCart) => {
+          res.status(200).send({
+            message: "Cart cleared successfully",
+            cart: updatedCart,
+          });
+        });
+      } else {
+        return res.status(200).send({
+          message: "Cart is already empty",
+        });
+      }
     })
     .catch((error) => errorHandler(error, req, res));
 };

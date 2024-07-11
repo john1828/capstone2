@@ -16,4 +16,9 @@ router.patch(
   cartController.updateCartQuantity
 );
 
+// Route in removing items in cart
+router.patch("/:productId/remove-from-cart", verify, cartController.removeItem);
+
+// Route in clearing a cart
+router.put("/clear-cart", verify, cartController.clearCart);
 module.exports = router;
