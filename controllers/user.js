@@ -127,7 +127,7 @@ module.exports.addCart = async (req, res) => {
   try {
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(404).send('Product not found');
+      return res.status(404).send({ error: "Product not found"});
     }
 
     const subtotal = product.price * quantity;
