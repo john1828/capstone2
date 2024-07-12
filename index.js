@@ -16,33 +16,18 @@ app.use(express.urlencoded({ extended: true }));
 // CORS options
 const corsOptions = {
   origin: ["http://localhost:8000"],
-  credentials: true, // Fix typo: should be 'credentials'
+  credentials: true,
   optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
 
-// MongoDB connection options
-const mongooseOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // 30 seconds
-  socketTimeoutMS: 45000, // 45 seconds
-};
+// connecting to mongodb atlas
+mongoose.connect(process.env.MONGODB_STRING);
 
-mongoose.connect(process.env.MONGODB_STRING, mongooseOptions);
-
-mongoose.connection.on("connected", () => {
-  console.log("Now connected to MongoDB Atlas");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
-});
-
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB disconnected");
-});
+mongoose.connection.once("open", () =>
+  console.log("Now connected to MongoDB Atlas")
+);
 
 // User routes
 app.use("/b4/users", userRoutes);
@@ -54,6 +39,5 @@ app.use("/b4/carts", cartRoutes);
 app.use("/b4/orders", orderRoutes);
 
 // Start the server
-
 const port = process.env.PORT;
 app.listen(port, () => console.log(`API is now available on port ${port}`));
