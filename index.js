@@ -38,9 +38,5 @@ app.use("/b4/carts", cartRoutes);
 app.use("/b4/orders", orderRoutes);
 
 // Start the server
-if (require.main === module) {
-  const port = process.env.PORT || 4004;
-  app.listen(port, () => console.log(`API is now available on port ${port}`));
-}
-
-module.exports = { app, mongoose };
+const port = process.env.PORT;
+app.listen(port, () => console.log(`API is now available on port ${port}`));
