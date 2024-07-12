@@ -64,7 +64,7 @@ module.exports.loginUser = (req, res) => {
 
 //Controller function to retrieving user details
 module.exports.getProfile = (req, res) => {
-  return User.findById(req.body.id)
+  return User.findById(req.user.id)
     .then((user) => {
       if (!user) {
         return res.status(404).send({ error: "User not found" });
