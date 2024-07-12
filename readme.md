@@ -57,3 +57,14 @@ password: jt12345678
 
 - Retrieve user's cart
 - Add to Cart
+
+**s54**
+**by Arnel Sinadhan**
+
+- Remove products from cart
+- Clear cart
+
+**by John Emerson Leyson**
+
+- Add Search by product name function
+- Add Search by price range function
