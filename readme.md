@@ -18,15 +18,39 @@ password: jt12345678
 
 **Features:**
 
-**s51**
 **by Arnel Sinadhan**
+
+**s51**
 
 - Data Model Design for User
 - Data Model Design for Cart
 - User Registration
 - User Authentication
 
+**s52**
+
+- Retrieve single product
+- Update Product Info
+- Archive Product
+- Activate Product
+
+**s53**
+
+- Change product quantities
+
+**s54**
+
+- Remove products from cart
+- Clear cart
+
+**s55**
+
+- Add create order feature
+- Add retrieve user's logged in orders
+
 **by John Emerson Leyson**
+
+**s51**
 
 - Data Model Design for Order
 - Retrieve User Details
@@ -34,14 +58,6 @@ password: jt12345678
 - Update Password
 
 **s52**
-**by Arnel Sinadhan**
-
-- Retrieve single product
-- Update Product Info
-- Archive Product
-- Activate Product
-
-**by John Emerson Leyson**
 
 - Data Model Design for Product
 - Create Product
@@ -49,22 +65,15 @@ password: jt12345678
 - Retrieve all Active Product
 
 **s53**
-**by Arnel Sinadhan**
-
-- Change product quantities
-
-**by John Emerson Leyson**
 
 - Retrieve user's cart
 - Add to Cart
 
 **s54**
-**by Arnel Sinadhan**
-
-- Remove products from cart
-- Clear cart
-
-**by John Emerson Leyson**
 
 - Add Search by product name function
 - Add Search by price range function
+
+**s55**
+
+- Add retrieve all user's orders
