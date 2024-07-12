@@ -1,4 +1,3 @@
-// Setting up ExpressJS Server
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -23,14 +22,31 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-mongoose.connect(process.env.MONGODB_STRING);
-mongoose.connection.once("open", () =>
-  console.log("Now connected to MongoDB Atlas")
-);
+// MongoDB connection options
+const mongooseOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000, // 30 seconds
+  socketTimeoutMS: 45000, // 45 seconds
+};
+
+mongoose.connect(process.env.MONGODB_STRING, mongooseOptions);
+
+mongoose.connection.on("connected", () => {
+  console.log("Now connected to MongoDB Atlas");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected");
+});
 
 // User routes
 app.use("/b4/users", userRoutes);
-// User routes
+// Product routes
 app.use("/b4/products", productRoutes);
 // Cart routes
 app.use("/b4/carts", cartRoutes);
@@ -38,5 +54,6 @@ app.use("/b4/carts", cartRoutes);
 app.use("/b4/orders", orderRoutes);
 
 // Start the server
+
 const port = process.env.PORT;
 app.listen(port, () => console.log(`API is now available on port ${port}`));
