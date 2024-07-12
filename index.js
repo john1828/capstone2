@@ -29,17 +29,17 @@ mongoose.connection.once("open", () =>
 );
 
 // User routes
-app.use("/users", userRoutes);
+app.use("/b4/users", userRoutes);
 // User routes
-app.use("/products", productRoutes);
+app.use("/b4/products", productRoutes);
 // Cart routes
-app.use("/carts", cartRoutes);
+app.use("/b4/carts", cartRoutes);
 // Order routes
-app.use("/orders", orderRoutes);
+app.use("/b4/orders", orderRoutes);
 
 // Start the server
 if (require.main === module) {
-  const port = process.env.PORT || 4000;
+  const port = process.env.PORT || 4004;
   app.listen(port, () => console.log(`API is now available on port ${port}`));
 }
 
