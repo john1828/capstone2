@@ -5,6 +5,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/user.js");
 const productRoutes = require("./routes/product.js");
 const cartRoutes = require("./routes/cart.js");
+const orderRoutes = require("./routes/order.js");
 require("dotenv").config();
 
 const app = express();
@@ -32,7 +33,9 @@ app.use("/users", userRoutes);
 // User routes
 app.use("/products", productRoutes);
 // Cart routes
-app.use("/cart", cartRoutes);
+app.use("/carts", cartRoutes);
+// Order routes
+app.use("/orders", orderRoutes);
 
 // Start the server
 if (require.main === module) {
