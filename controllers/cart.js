@@ -5,7 +5,13 @@ const { errorHandler } = auth;
 
 // Controller function to get users Cart
 module.exports.getUserCart = (req, res) => {
-  Cart.findOne({ userId: req.user.id })
+  if(req.user.isAdmin){
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden"
+    });
+  } else {
+    Cart.findOne({ userId: req.user.id })
     .then((cart) => {
       if (!cart) {
         return res.status(404).send({
@@ -13,86 +19,94 @@ module.exports.getUserCart = (req, res) => {
         });
       } else {
         return res.status(200).send({
-          cart,
+          cart: cart
         });
       }
     })
     .catch((error) => errorHandler(error, req, res));
+  }
 };
 
 // Controller function for adding products to cart
 module.exports.addToCart = async (req, res) => {
-  try {
-    const productId = req.body.productId;
-    const quantity = req.body.quantity;
+  if(req.user.isAdmin){
+    return res.status(403).send({
+      auth: "Failed",
+      message: "Action Forbidden"
+    });
+  } else {
+    try {
+      const productId = req.body.productId;
+      const quantity = req.body.quantity;
 
     // Check if product exists
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).send({ message: "Product not found" });
-    }
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).send({ message: "Product not found" });
+      }
 
     // Find the user's cart
-    let userCart = await Cart.findOne({ userId: req.user.id });
+      let userCart = await Cart.findOne({ userId: req.user.id });
 
-    if (!userCart) {
+      if (!userCart) {
       // If no cart exists, create a new one
-      const subtotal = product.price * quantity;
+        const subtotal = product.price * quantity;
 
-      const cart = new Cart({
-        userId: req.user.id,
-        cartItems: [
+        const cart = new Cart({
+          userId: req.user.id,
+          cartItems: [
           {
             productId: productId,
             quantity: quantity,
             subtotal: subtotal,
           },
-        ],
-        totalPrice: subtotal,
-      });
-      await cart.save();
-
-      return res.status(200).send({
-        message: "Items added to cart successfully",
-        cart,
-      });
-    } else {
-      // If cart exists, update it
-      let cartItem = userCart.cartItems.find(
-        (item) => item.productId.toString() === productId
-      );
-
-      if (cartItem) {
-        cartItem.quantity += quantity;
-        cartItem.subtotal = product.price * cartItem.quantity;
-      } else {
-        userCart.cartItems.push({
-          productId: productId,
-          quantity: quantity,
-          subtotal: product.price * quantity,
+          ],
+          totalPrice: subtotal,
         });
-      }
+        await cart.save();
+
+        return res.status(200).send({
+          message: "Items added to cart successfully",
+          cart,
+        });
+      } else {
+      // If cart exists, update it
+        let cartItem = userCart.cartItems.find(
+          (item) => item.productId.toString() === productId
+          );
+
+        if (cartItem) {
+          cartItem.quantity += quantity;
+          cartItem.subtotal = product.price * cartItem.quantity;
+        } else {
+          userCart.cartItems.push({
+            productId: productId,
+            quantity: quantity,
+            subtotal: product.price * quantity,
+          });
+        }
 
       // Update total price of the cart
-      userCart.totalPrice = userCart.cartItems.reduce(
-        (total, item) => total + item.subtotal,
-        0
-      );
+        userCart.totalPrice = userCart.cartItems.reduce(
+          (total, item) => total + item.subtotal,
+          0
+          );
 
       // Save the updated cart
-      await userCart.save();
+        await userCart.save();
 
-      return res.status(200).send({
-        message: "Cart updated successfully",
-        cart: userCart,
+        return res.status(200).send({
+          message: "Cart updated successfully",
+          cart: userCart,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({
+        message: "An error occurred while adding items to the cart",
+        error,
       });
     }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send({
-      message: "An error occurred while adding items to the cart",
-      error,
-    });
   }
 };
 

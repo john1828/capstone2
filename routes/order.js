@@ -10,5 +10,8 @@ router.post("/checkout", verify, orderController.checkOut);
 
 // Route in retrieving logged in user's order
 router.get("/my-orders", verify, orderController.getUserOrder);
+
+router.get("/all-orders", verify, verifyAdmin, orderController.getAllOrders);
+
 // Exporting the router module
 module.exports = router;
