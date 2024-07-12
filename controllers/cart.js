@@ -5,61 +5,61 @@ const { errorHandler } = auth;
 
 // Controller function to get users Cart
 module.exports.getUserCart = (req, res) => {
-  if(req.user.isAdmin){
+  if (req.user.isAdmin) {
     return res.status(403).send({
       auth: "Failed",
-      message: "Action Forbidden"
+      message: "Action Forbidden",
     });
   } else {
     Cart.findOne({ userId: req.user.id })
-    .then((cart) => {
-      if (!cart) {
-        return res.status(404).send({
-          message: "Cart not Found",
-        });
-      } else {
-        return res.status(200).send({
-          cart: cart
-        });
-      }
-    })
-    .catch((error) => errorHandler(error, req, res));
+      .then((cart) => {
+        if (!cart) {
+          return res.status(404).send({
+            message: "Cart not Found",
+          });
+        } else {
+          return res.status(200).send({
+            cart: cart,
+          });
+        }
+      })
+      .catch((error) => errorHandler(error, req, res));
   }
 };
 
 // Controller function for adding products to cart
 module.exports.addToCart = async (req, res) => {
-  if(req.user.isAdmin){
+  if (req.user.isAdmin) {
     return res.status(403).send({
       auth: "Failed",
-      message: "Action Forbidden"
+      message: "Action Forbidden",
     });
   } else {
     try {
       const productId = req.body.productId;
       const quantity = req.body.quantity;
 
-    // Check if product exists
+      // Check if product exists
       const product = await Product.findById(productId);
       if (!product) {
         return res.status(404).send({ message: "Product not found" });
       }
 
-    // Find the user's cart
+      // Find the user's cart
       let userCart = await Cart.findOne({ userId: req.user.id });
 
       if (!userCart) {
-      // If no cart exists, create a new one
+        // If no cart exists, create a new one
         const subtotal = product.price * quantity;
 
         const cart = new Cart({
           userId: req.user.id,
           cartItems: [
-          {
-            productId: productId,
-            quantity: quantity,
-            subtotal: subtotal,
-          },
+            {
+              productId: productId,
+              quantity: quantity,
+              subtotal: subtotal,
+            },
           ],
           totalPrice: subtotal,
         });
@@ -70,10 +70,10 @@ module.exports.addToCart = async (req, res) => {
           cart,
         });
       } else {
-      // If cart exists, update it
+        // If cart exists, update it
         let cartItem = userCart.cartItems.find(
           (item) => item.productId.toString() === productId
-          );
+        );
 
         if (cartItem) {
           cartItem.quantity += quantity;
@@ -86,13 +86,13 @@ module.exports.addToCart = async (req, res) => {
           });
         }
 
-      // Update total price of the cart
+        // Update total price of the cart
         userCart.totalPrice = userCart.cartItems.reduce(
           (total, item) => total + item.subtotal,
           0
-          );
+        );
 
-      // Save the updated cart
+        // Save the updated cart
         await userCart.save();
 
         return res.status(200).send({
@@ -101,11 +101,7 @@ module.exports.addToCart = async (req, res) => {
         });
       }
     } catch (error) {
-      console.error(error);
-      return res.status(500).send({
-        message: "An error occurred while adding items to the cart",
-        error,
-      });
+      errorHandler(error, req, res);
     }
   }
 };
@@ -151,11 +147,7 @@ module.exports.updateCartQuantity = async (req, res) => {
       updatedCart: updatedCart,
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({
-      message: "An error occurred while updating the cart",
-      error,
-    });
+    errorHandler(error, req, res);
   }
 };
 
@@ -197,11 +189,7 @@ module.exports.removeItem = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({
-      message: "An error occurred while removing the item from the cart",
-      error,
-    });
+    errorHandler(error, req, res);
   }
 };
 
