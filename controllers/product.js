@@ -1,4 +1,4 @@
-const Product = require("../models/Product.js");
+const Products = require("../models/Product.js");
 const Cart = require("../models/Cart.js");
 const { errorHandler } = require("../auth");
 
@@ -9,7 +9,7 @@ module.exports.addProduct = (req, res) => {
     description: req.body.description,
     price: req.body.price,
   });
-  Product.findOne({ name: req.body.name })
+  Products.findOne({ name: req.body.name })
     .then((existingProduct) => {
       if (existingProduct) {
         return res.status(409).send({ message: "Product is already exist" });
@@ -30,7 +30,7 @@ module.exports.addProduct = (req, res) => {
 //[SECTION] Retrieve all products
 module.exports.getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Products.find({});
     if (products.length > 0) {
       return res.status(200).send({ products });
     } else {
@@ -43,7 +43,7 @@ module.exports.getAllProduct = async (req, res) => {
 
 //[SECTION] Retrieve all active products
 module.exports.getActiveProduct = (req, res) => {
-  Product.find({ isActive: true })
+  Products.find({ isActive: true })
     .then((result) => {
       if (result.length > 0) {
         return res.status(200).send({ products: result });
@@ -56,7 +56,7 @@ module.exports.getActiveProduct = (req, res) => {
 
 // Controller function for retrieving a single product
 module.exports.retrieveSingleProduct = (req, res) => {
-  Product.findById(req.params.productId)
+  Products.findById(req.params.productId)
     .then((retrievedProduct) => {
       if (retrievedProduct) {
         return res.status(200).send({
@@ -77,7 +77,7 @@ module.exports.updateProduct = (req, res) => {
     price: req.body.price,
   };
 
-  Product.findByIdAndUpdate(req.params.productId, UpdatedProduct)
+  Products.findByIdAndUpdate(req.params.productId, UpdatedProduct)
     .then((product) => {
       if (product) {
         return res.status(200).send({
@@ -95,7 +95,7 @@ module.exports.updateProduct = (req, res) => {
 
 // Controller function for archiving a product
 module.exports.archiveProduct = (req, res) => {
-  Product.findByIdAndUpdate(
+  Products.findByIdAndUpdate(
     req.params.productId,
     { isActive: false },
     { new: true }
@@ -115,7 +115,7 @@ module.exports.archiveProduct = (req, res) => {
 
 // Controller function for activating a product
 module.exports.activateProduct = (req, res) => {
-  Product.findByIdAndUpdate(
+  Products.findByIdAndUpdate(
     req.params.productId,
     { isActive: true },
     { new: true }
@@ -141,7 +141,7 @@ module.exports.searchByName = async (req, res) => {
       return res.status(400).json({ error: "Product name is required" });
     }
 
-    const products = await Product.find({ name });
+    const products = await Products.find({ name });
 
     if (products.length === 0) {
       return res.status(404).json({ error: "No product found" });
@@ -166,7 +166,7 @@ module.exports.searchByPrice = async (req, res) => {
   }
 
   try {
-    const products = await Product.find({
+    const products = await Products.find({
       price: { $gte: minPrice, $lte: maxPrice },
     });
 
