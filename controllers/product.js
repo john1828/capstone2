@@ -33,7 +33,7 @@ module.exports.getAllProduct = async (req, res) => {
   try {
     const products = await Product.find({});
     if (products.length > 0) {
-      res.status(200).send({ products });
+      res.status(200).send( products );
     } else {
       res.status(404).send({ message: "No products found" });
     }
