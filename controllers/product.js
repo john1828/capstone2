@@ -47,7 +47,7 @@ module.exports.getActiveProduct = async (req, res) => {
   try {
     const activeProducts = await Product.find({ isActive: true });
     if (activeProducts.length > 0) {
-      res.status(200).send({ products: activeProducts });
+      res.status(200).send( activeProducts );
     } else {
       res.status(404).send({ message: "No active products found" });
     }
