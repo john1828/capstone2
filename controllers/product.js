@@ -22,7 +22,7 @@ module.exports.addProduct = async (req, res) => {
     // Save product to database
     const savedProduct = await newProduct.save();
 
-    res.status(201).send({ product: savedProduct });
+    res.status(201).send(savedProduct );
   } catch (error) {
     errorHandler(error, req, res);
   }
@@ -62,7 +62,7 @@ module.exports.retrieveSingleProduct = async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findById(productId);
     if (product) {
-      res.status(200).send({ product });
+      res.status(200).send( product );
     } else {
       res.status(404).send({ message: "Product not found" });
     }
@@ -146,7 +146,7 @@ module.exports.searchByName = async (req, res) => {
     if (products.length === 0) {
       return res.status(404).send({ message: "No product found" });
     }
-    res.status(200).send({ products });
+    res.status(200).send(products);
   } catch (error) {
     errorHandler(error, req, res);
   }
@@ -164,7 +164,7 @@ module.exports.searchByPrice = async (req, res) => {
     const products = await Product.find({
       price: { $gte: minPrice, $lte: maxPrice },
     });
-    res.status(200).send({ products });
+    res.status(200).send(products);
   } catch (error) {
     errorHandler(error, req, res);
   }
