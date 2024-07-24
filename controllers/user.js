@@ -83,7 +83,7 @@ module.exports.getProfile = (req, res) => {
       if (!user) {
         return res.status(404).send({ error: "User not found" });
       } else {
-        return res.status(200).send({ user: user });
+        return res.status(200).send(user);
       }
     })
     .catch((error) => errorHandler(error, req, res));
@@ -105,9 +105,7 @@ module.exports.updateAsAdmin = (req, res) => {
           message: "User not found",
         });
       }
-      return res.status(200).send({
-        updatedUser: updatedUser,
-      });
+      return res.status(200).send(updatedUser);
     })
     .catch((error) => {
       res.status(500).send({
