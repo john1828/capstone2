@@ -4,14 +4,15 @@ const { verify, verifyAdmin } = require("../auth.js");
 
 const router = express.Router();
 
+// Routes
+
+// For registering a user
 router.post("/register", userController.registerUser);
+// For log in
 router.post("/login", userController.loginUser);
-// router.post("/details", verify, userController.retrieveUserDetails);
-
-//Route for retrieving user details
+// for retrieving user details
 router.get("/details", verify, userController.getProfile);
-
-//[SECTION] Route for updating user as admin
+// for updating user as admin
 router.patch(
   "/:userId/set-as-admin",
   verify,
@@ -19,8 +20,7 @@ router.patch(
   userController.updateAsAdmin
 );
 
-//Route for updating password
+// for updating password
 router.patch("/update-password", verify, userController.updatePassword);
 
-//Export Route System
 module.exports = router;
