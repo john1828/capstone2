@@ -142,7 +142,7 @@ module.exports.searchByName = async (req, res) => {
     if (!name) {
       return res.status(400).send({ error: "Product name is required" });
     }
-    const products = await Product.find({ name });
+    const products = await Product.find({ name: { $regex: name, $options: 'i' } });
     if (products.length === 0) {
       return res.status(404).send({ message: "No product found" });
     }
@@ -151,6 +151,7 @@ module.exports.searchByName = async (req, res) => {
     errorHandler(error, req, res);
   }
 };
+
 
 // Search product by price range
 module.exports.searchByPrice = async (req, res) => {
