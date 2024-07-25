@@ -156,7 +156,7 @@ module.exports.updateCartQuantity = async (req, res) => {
 // Controller function for removing an item from the cart
 module.exports.removeItem = async (req, res) => {
   try {
-    const productId = req.params.productId; // productId will be in params
+    const productId = req.body.productId; 
 
     const userCart = await Cart.findOne({ userId: req.user.id });
 
