@@ -11,7 +11,7 @@ module.exports.getUserCart = (req, res) => {
       message: "Action Forbidden",
     });
   } else {
-    Cart.findOne({ userId: req.user.id })
+    Cart.find({ userId: req.user.id })
       .then((cart) => {
         if (!cart) {
           return res.status(404).send({
