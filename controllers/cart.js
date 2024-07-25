@@ -18,7 +18,7 @@ module.exports.getUserCart = (req, res) => {
             message: "Cart not Found",
           });
         } else {
-          return res.status(200).send(cart);
+          return res.status(200).send([cart]);
         }
       })
       .catch((error) => errorHandler(error, req, res));
