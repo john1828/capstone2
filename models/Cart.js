@@ -11,6 +11,14 @@ const cartSchema = new mongoose.Schema({
         type: String,
         required: [true, "Product ID is required"],
       },
+      name: {
+        type: String,
+        required: [true, "Product name is required"],
+      },
+      price: {
+        type: String,
+        required: [true, "Product price is required"],
+      },
       quantity: {
         type: Number,
         required: [true, "Quantity is required"],
@@ -32,3 +40,4 @@ const cartSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Cart", cartSchema);
+ 
