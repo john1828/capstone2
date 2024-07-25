@@ -49,6 +49,8 @@ module.exports.addToCart = async (req, res) => {
       if (!userCart) {
         // If no cart exists, create a new one
         const subtotal = product.price * quantity;
+        const name = product.name;
+        const price = product.price;
 
         const cart = new Cart({
           userId: req.user.id,
