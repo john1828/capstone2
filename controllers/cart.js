@@ -32,81 +32,83 @@ module.exports.addToCart = async (req, res) => {
       auth: "Failed",
       message: "Action Forbidden",
     });
-  } else {
-    try {
-      const productId = req.body.productId;
-      const quantity = req.body.quantity;
+  }
 
-      // Check if product exists
-      const product = await Product.findById(productId);
-      if (!product) {
-        return res.status(404).send({ message: "Product not found" });
-      }
+  try {
+    const { productId, quantity } = req.body;
 
-      // Find the user's cart
-      let userCart = await Cart.findOne({ userId: req.user.id });
-
-      if (!userCart) {
-        // If no cart exists, create a new one
-        const subtotal = product.price * quantity;
-        const name = product.name;
-        const price = product.price;
-
-        const cart = new Cart({
-          userId: req.user.id,
-          cartItems: [
-            {
-              productId: productId,
-              name: name,
-              price: price,
-              quantity: quantity,
-              subtotal: subtotal,
-            },
-          ],
-          totalPrice: subtotal,
-        });
-        await cart.save();
-
-        return res.status(200).send({
-          message: "Items added to cart successfully",
-          cart,
-        });
-      } else {
-        // If cart exists, update it
-        let cartItem = userCart.cartItems.find(
-          (item) => item.productId.toString() === productId
-        );
-
-        if (cartItem) {
-          cartItem.quantity += quantity;
-          cartItem.subtotal = product.price * cartItem.quantity;
-        } else {
-          userCart.cartItems.push({
-            productId: productId,
-            quantity: quantity,
-            subtotal: product.price * quantity,
-          });
-        }
-
-        // Update total price of the cart
-        userCart.totalPrice = userCart.cartItems.reduce(
-          (total, item) => total + item.subtotal,
-          0
-        );
-
-        // Save the updated cart
-        await userCart.save();
-
-        return res.status(200).send({
-          message: "Cart updated successfully",
-          cart: userCart,
-        });
-      }
-    } catch (error) {
-      errorHandler(error, req, res);
+    // Check if product exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
     }
+
+    // Find the user's cart
+    let userCart = await Cart.findOne({ userId: req.user.id });
+
+    if (!userCart) {
+      // If no cart exists, create a new one
+      const subtotal = product.price * quantity;
+
+      const cart = new Cart({
+        userId: req.user.id,
+        cartItems: [
+          {
+            productId: productId,
+            name: product.name,
+            price: product.price,
+            quantity: quantity,
+            subtotal: subtotal,
+          },
+        ],
+        totalPrice: subtotal,
+      });
+      await cart.save();
+
+      return res.status(200).send({
+        message: "Items added to cart successfully",
+        cart,
+      });
+    } else {
+      // If cart exists, update it
+      let cartItem = userCart.cartItems.find(
+        (item) => item.productId.toString() === productId
+      );
+
+      if (cartItem) {
+        // If item already exists in cart, update its quantity and subtotal
+        cartItem.quantity += quantity;
+        cartItem.subtotal = product.price * cartItem.quantity;
+      } else {
+        // If item does not exist in cart, add it
+        userCart.cartItems.push({
+          productId: productId,
+          name: product.name,
+          price: product.price,
+          quantity: quantity,
+          subtotal: product.price * quantity,
+        });
+      }
+
+      // Update total price of the cart
+      userCart.totalPrice = userCart.cartItems.reduce(
+        (total, item) => total + item.subtotal,
+        0
+      );
+
+      // Save the updated cart
+      await userCart.save();
+
+      return res.status(200).send({
+        message: "Cart updated successfully",
+        cart: userCart,
+      });
+    }
+  } catch (error) {
+    errorHandler(error, req, res);
   }
 };
+
 
 // Controller function for updating product quantities in Cart
 module.exports.updateCartQuantity = async (req, res) => {
