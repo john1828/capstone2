@@ -30,7 +30,7 @@ mongoose.connection.once("open", () =>
   console.log("Now connected to MongoDB Atlas")
 );
 // static files form the uploads directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/b4/uploads", express.static(path.join(__dirname, "uploads")));
 // User routes
 app.use("/b4/users", userRoutes);
 // Product routes
