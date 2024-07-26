@@ -17,12 +17,13 @@ module.exports.addProduct = async (req, res) => {
       name,
       description,
       price,
+      image: req.file.path,
     });
 
     // Save product to database
     const savedProduct = await newProduct.save();
 
-    res.status(201).send(savedProduct );
+    res.status(201).send(savedProduct);
   } catch (error) {
     errorHandler(error, req, res);
   }
@@ -33,7 +34,7 @@ module.exports.getAllProduct = async (req, res) => {
   try {
     const products = await Product.find({});
     if (products.length > 0) {
-      res.status(200).send( products );
+      res.status(200).send(products);
     } else {
       res.status(404).send({ message: "No products found" });
     }
@@ -47,7 +48,7 @@ module.exports.getActiveProduct = async (req, res) => {
   try {
     const activeProducts = await Product.find({ isActive: true });
     if (activeProducts.length > 0) {
-      res.status(200).send( activeProducts );
+      res.status(200).send(activeProducts);
     } else {
       res.status(404).send({ message: "No active products found" });
     }
@@ -62,7 +63,7 @@ module.exports.retrieveSingleProduct = async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findById(productId);
     if (product) {
-      res.status(200).send( product );
+      res.status(200).send(product);
     } else {
       res.status(404).send({ message: "Product not found" });
     }
@@ -76,9 +77,15 @@ module.exports.updateProduct = async (req, res) => {
   try {
     const { productId } = req.params;
     const { name, description, price } = req.body;
+
+    // Check if a new image file is uploaded
+    let updateData = { name, description, price };
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
-      { name, description, price },
+      updateData,
       { new: true }
     );
     if (updatedProduct) {
@@ -142,7 +149,9 @@ module.exports.searchByName = async (req, res) => {
     if (!name) {
       return res.status(400).send({ error: "Product name is required" });
     }
-    const products = await Product.find({ name: { $regex: name, $options: 'i' } });
+    const products = await Product.find({
+      name: { $regex: name, $options: "i" },
+    });
     if (products.length === 0) {
       return res.status(404).send({ message: "No product found" });
     }
@@ -151,7 +160,6 @@ module.exports.searchByName = async (req, res) => {
     errorHandler(error, req, res);
   }
 };
-
 
 // Search product by price range
 module.exports.searchByPrice = async (req, res) => {
