@@ -5,7 +5,6 @@ const userRoutes = require("./routes/user.js");
 const productRoutes = require("./routes/product.js");
 const cartRoutes = require("./routes/cart.js");
 const orderRoutes = require("./routes/order.js");
-const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -30,7 +29,6 @@ mongoose.connection.once("open", () =>
   console.log("Now connected to MongoDB Atlas")
 );
 // static files form the uploads directory
-app.use("/b4/uploads", express.static(path.join(__dirname, "uploads")));
 // User routes
 app.use("/b4/users", userRoutes);
 // Product routes

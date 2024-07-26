@@ -17,7 +17,6 @@ module.exports.addProduct = async (req, res) => {
       name,
       description,
       price,
-      image: req.file.path,
     });
 
     // Save product to database
@@ -80,9 +79,7 @@ module.exports.updateProduct = async (req, res) => {
 
     // Check if a new image file is uploaded
     let updateData = { name, description, price };
-    if (req.file) {
-      updateData.image = req.file.path;
-    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       updateData,
