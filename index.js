@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS options
 const corsOptions = {
-  origin: ["capstone3-hazel-eight.vercel.app"],
+  origin: ["https://capstone3-hazel-eight.vercel.app/"],
   credentials: true,
   optionSuccessStatus: 200,
 };
