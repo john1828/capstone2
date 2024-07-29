@@ -88,7 +88,7 @@ module.exports.getAllOrders = (req, res) => {
   return Order.find({})
     .then((result) => {
       if (result.length > 0) {
-        return res.status(200).send({ orders: result });
+        return res.status(200).send(result);
       } else {
         return res.status(404).send({ message: "No order found" });
       }
