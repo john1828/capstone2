@@ -3,7 +3,7 @@ const Cart = require("../models/Cart.js");
 const auth = require("../auth.js");
 const { errorHandler } = auth;
 
-// Controller function for user to create an order
+// Controller function to checkout order
 module.exports.checkOut = async (req, res) => {
   if (req.user.isAdmin) {
     return res.status(403).send({
@@ -23,18 +23,28 @@ module.exports.checkOut = async (req, res) => {
         const productsOrdered = userCart.cartItems.map((item) => ({
           productId: item.productId,
           name: item.name,
-          quantity: item.quantity,
           price: item.price,
+          quantity: item.quantity,
           subtotal: item.subtotal,
         }));
 
-        const userOrder = new Order({
-          userId: req.user.id,
-          productsOrdered: productsOrdered,
-          totalPrice: userCart.totalPrice,
-        });
+        let userOrder = await Order.findOne({ userId: req.user.id });
+
+        if (userOrder) {
+          // If order exists, push new products into the productsOrdered array
+          userOrder.productsOrdered.push(...productsOrdered);
+          userOrder.totalPrice += userCart.totalPrice;
+        } else {
+          // If no order exists, create a new one
+          userOrder = new Order({
+            userId: req.user.id,
+            productsOrdered: productsOrdered,
+            totalPrice: userCart.totalPrice,
+          });
+        }
 
         await userOrder.save();
+
         return res.status(200).send({
           message: "Ordered successfully",
         });
