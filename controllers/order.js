@@ -22,7 +22,9 @@ module.exports.checkOut = async (req, res) => {
       } else if (userCart.cartItems.length > 0) {
         const productsOrdered = userCart.cartItems.map((item) => ({
           productId: item.productId,
+          name: item.name,
           quantity: item.quantity,
+          price: item.price,
           subtotal: item.subtotal,
         }));
 
