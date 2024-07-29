@@ -11,6 +11,10 @@ const orderSchema = new mongoose.Schema({
   			type: String,
     		required: [true, "Product Id is Required"]
   		} ,
+      name: {type: String, required: [true, "Product name is required"]},
+      price: { type: String,
+        required: [true, "Product price is required"],
+},
   		quantity: Number,
   		subtotal: Number
   	}
