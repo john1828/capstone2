@@ -62,9 +62,9 @@ module.exports.getUserOrder = async (req, res) => {
             error: "User orders not found",
           });
         } else {
-          return res.status(200).send({
-            orders: [userOrder],
-          });
+          return res.status(200).send(
+             userOrder
+          );
         }
       });
     } catch (error) {
