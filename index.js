@@ -18,7 +18,7 @@ const corsOptions = {
   origin: [
     "https://capstone3-jade.vercel.app",
     "https://capstone3-git-master-johns-projects-436843b3.vercel.app",
-    "https://capstone3-badrrv81y-johns-projects-436843b3.vercel.app",
+    "https://capstone3-ehlnn78q0-johns-projects-436843b3.vercel.app",
   ],
   credentials: true,
   optionSuccessStatus: 200,
